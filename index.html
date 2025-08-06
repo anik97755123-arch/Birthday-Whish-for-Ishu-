@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Surprise</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="welcome">
+    <h2>Enter Secret Key</h2>
+    <input type="password" id="keyInput" placeholder="Enter Key" />
+    <button onclick="checkKey()">Unlock</button>
+  </div>
+
+  <div id="formSection" style="display: none;">
+    <h2>Make a Flipbook for Your Love</h2>
+    <input placeholder="Her Name" id="name" />
+    <input placeholder="Birthday Date" id="date" />
+    <textarea placeholder="Message" id="message"></textarea>
+    <input placeholder="❤️🎉🎂 (Emojis)" id="emojis" />
+    <button onclick="generateLink()">Generate Link</button>
+    <div id="output"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

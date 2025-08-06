@@ -1,0 +1,21 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  padding: 20px;
+  background: #fff5f8;
+}
+
+input, textarea {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 80%;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background: pink;
+  border: none;
+  border-radius: 5px;
+}

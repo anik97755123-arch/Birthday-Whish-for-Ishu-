@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎂 Birthday Surprise for You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/page-flip/dist/page-flip.browser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: #fff0f5;
+      overflow: hidden;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 24px;
+      color: #e91e63;
+    }
+    #bookContainer {
+      width: 90%;
+      max-width: 600px;
+      height: 450px;
+      margin: 30px auto;
+      z-index: 10;
+      position: relative;
+    }
+    .page {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 40px 20px;
+      font-size: 20px;
+      color: #333;
+    }
+    .made-by {
+      font-size: 14px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 10;
+    }
+    canvas#hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🎁 A Little Birthday Gift 🎁</h2>
+
+<canvas id="hearts"></canvas>
+
+<div id="bookContainer"></div>
+
+<p class="made-by">Made with ❤️ by <strong>Anik</strong></p>
+
+<!-- Background Music -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+  // Floating Hearts Animation
+  const canvas = document.getElementById("hearts");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let hearts = [];
+  for (let i = 0; i < 80; i++) {
+    hearts.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 5 + 1,
+      dx: (Math.random() - 0.5),
+      dy: (Math.random() - 0.5),
+    });
+  }
+  function drawHearts() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let h of hearts) {
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(255,105,180,0.5)";
+      ctx.moveTo(h.x, h.y);
+      ctx.arc(h.x, h.y, h.r, 0, Math.PI * 2);
+      ctx.fill();
+      h.x += h.dx;
+      h.y += h.dy;
+      if (h.x < 0 || h.x > canvas.width) h.dx *= -1;
+      if (h.y < 0 || h.y > canvas.height) h.dy *= -1;
+    }
+    requestAnimationFrame(drawHearts);
+  }
+  drawHearts();
+
+  // Read Data from URL
+  const params = new URLSearchParams(window.location.search);
+  const to = decodeURIComponent(params.get('to') || 'My Love');
+  const date = decodeURIComponent(params.get('date') || 'Your Special Day');
+  const msg = decodeURIComponent(params.get('msg') || 'Wishing you endless joy and love today and always!');
+  const emojis = decodeURIComponent(params.get('emojis') || '❤️🎉🎂✨');
+
+  // Flipbook Initialization
+  const flipbook = new St.PageFlip(document.getElementById("bookContainer"), {
+    width: 400,
+    height: 400,
+    size: "stretch",
+    minWidth: 315,
+    maxWidth: 1000,
+    minHeight: 400,
+    maxHeight: 1536,
+    maxShadowOpacity: 0.5,
+    showCover: true,
+    mobileScrollSupport: false
+  });
+
+  // Split message into book pages
+  function splitMessage(text, limit = 150) {
+    let pages = [];
+    for (let i = 0; i < text.length; i += limit) {
+      pages.push(text.substring(i, i + limit));
+    }
+    return pages;
+  }
+
+  const pages = [
+    `<h3>🎂 Happy Birthday, ${to} 🎂</h3>
+     <img src= "https://i.postimg.cc/SNf85pbZ/1744560639044.jpg" style="width:90%;border-radius:15px;margin-top:10px;">
+     <p>${emojis}</p><p>Date: ${date}</p>`,
+    ...splitMessage(msg).map((part, i) => `<h3>Page ${i + 1}</h3><p>${part}</p>`),
+    `<h3>💖 Forever Yours</h3><p>With all my heart,<br><strong>Anik</strong></p>`
+  ];
+
+  const pageElements = pages.map(content => {
+    const el = document.createElement('div');
+    el.classList.add('page');
+    el.innerHTML = content;
+    return el;
+  });
+
+  flipbook.loadFromHTML(pageElements);
+
+  // Auto-flip pages
+  let current = 0;
+  const total = pageElements.length;
+  setInterval(() => {
+    if (current < total - 1) {
+      flipbook.flipNext();
+      current++;
+    }
+  }, 4000); // flip every 4 seconds
+
+  // Autoplay music fallback (in case browser blocks it initially)
+  window.addEventListener('click', () => {
+    document.getElementById('bgMusic').play();
+  });
+</script>
+
+</body>
+</html>
